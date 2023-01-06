@@ -24,20 +24,27 @@ H_func_vect = @(x)H_func(x(1),x(2));
 %inicjalizacja wartości początkowej:
 x = [];
 x(:,end+1) = x_;
+%warunek stopu na liczbę iteracji
 while i<N_max
+    % warunek stopu na wyznacznik macierzy Hessego
     if det(H_func_vect(x(:,i))) == 0
         x_lst = x;
         return
     end
+    % warunek stopu na gradient funkcji celu
     if f_diff_func_vect(x(:,i)) == [0;0]
         x_lst = x;
         return
     end
+    % policzenie kierunku do optymalizacji na kierunku
     d = inv(H_func_vect(x(:,i)))*f_diff_func_vect(x(:,i));
+    % funkcja do optymalizacji jednowymiarowej 
     f_func_direction = @(step)(f_func_vect(x(:,end)-step*d));
+    % optymalizacja na kierunku (dobranie suboptymalnego kroku)
     h = fminsearch(f_func_direction,0);
     i=i+1;
     x(:,end+1) = x(:,end) - h*d;
+    % warunek stopu na przyrost argumentów
     if sqrt(sum((x(:,end)-x(:,end-1)).^2)) < epsilon
         x_lst = x;
         return
