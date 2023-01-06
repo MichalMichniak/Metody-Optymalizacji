@@ -20,9 +20,9 @@ while i < N_max
     end
     d(1:end-1,:) = d(2:end,:);
     d(len_d,:) = pn - p0;
-    f = @(a)(func(pn+a*d(len_d)));
+    f = @(a)(func(pn+a*d(len_d,:)));
     alpha = fminsearch(f,0);
-    pn = pn+alpha*d(end);
+    pn = pn+alpha*d(end,:);
     x=pn;
     i= i+1;
 end
