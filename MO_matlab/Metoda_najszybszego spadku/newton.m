@@ -5,21 +5,21 @@ function [x_lst] = newton(f,x_,N_max,epsilon)
 % x_ - punkt początkowy
 % N_max - maksymalna liczba iteracji
 % epsilon - warunek stopu
-
+syms x1 x2
 i = 1;
 % liczenie gradientu:
 f_diff = gradient(f);
 % zamiana gradientu funkcji symbolicnej na funkcje zwykłą
-f_diff_func = matlabFunction(f_diff);
+f_diff_func = matlabFunction(f_diff,'Vars',{x1,x2});
 % zamiana funkcji symbolicnej na funkcje zwykłą
-f_func = matlabFunction(f);
+f_func = matlabFunction(f,'Vars',{x1,x2});
 % rozpakowanie argumentów funkcji:
 f_diff_func_vect = @(x)f_diff_func(x(1),x(2));
 f_func_vect = @(x)f_func(x(1),x(2));
 % symboliczne policzenie macierzy Hessego
 H = hessian(f);
 % zamiana macierzy Hessego z formy symbolicnej na funkcje zwykłą
-H_func = matlabFunction(H);
+H_func = matlabFunction(H,'Vars',{x1,x2});
 H_func_vect = @(x)H_func(x(1),x(2));
 %inicjalizacja wartości początkowej:
 x = [];
